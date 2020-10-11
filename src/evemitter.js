@@ -14,7 +14,7 @@ class EvemitterServer {
     this.calls = []
     this.loginData = loginData
     this.server = https.createServer(hso, (req, res) => {
-      res.writeHead(200, { 'Content-Type': 'application/json' })
+      res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' })
 
       const path = req.url.replace('/', '').split('/')
       const login = {
