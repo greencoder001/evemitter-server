@@ -44,7 +44,7 @@ class EvemitterServer {
 
   call ([id, msg], { user }) {
     const call = new EvemitterCall(id, atob(msg), user)
-    console.log(`Call from ${user} with id ${id}: `, call)
+    console.log(`Call from ${user} with id ${id}`)
     this.calls.push(call)
   }
 
