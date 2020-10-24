@@ -15,6 +15,7 @@ class EvemitterServer {
   constructor (hso, port, loginData) {
     this.calls = []
     this.currentCallID = 0
+    this.userCallIDS = {}
     this.loginData = loginData
     this.server = https.createServer(hso, (req, res) => {
       res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' })
@@ -39,7 +40,7 @@ class EvemitterServer {
         if (method === 'call') {
           res.write(this.call(argv, login))
         } else if (method === 'calls') {
-          res.write(this.getCalls())
+          res.write(this.getCalls(login))
         }
       }
 
@@ -68,8 +69,20 @@ class EvemitterServer {
     })
   }
 
-  getCalls () {
-    return JSON.stringify(this.calls)
+  getCalls ({ user }) {
+    const p = this
+    // OLD: return JSON.stringify(this.calls)
+    this.userCallIDS[user] = typeof this.userCallIDS[user] !== 'number' ? 0 : this.userCallIDS[user]
+    const calls = this.calls.filter(function (item) {
+      const { id } = item
+
+      return id >= p.userCallIDS[user]
+    })
+
+    const newestID = calls[calls.length - 1] === undefined ? this.userCallIDS[user] : calls[calls.length - 1].id + 1
+    this.userCallIDS[user] = newestID
+
+    return JSON.stringify(calls)
   }
 
   mayAccess (login) {
