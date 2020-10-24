@@ -1,5 +1,7 @@
 const https = require('https')
 
+// const sleep = function (ms) { return new Promise((resolve) => { setTimeout(resolve, ms) }) }
+
 const { atob } = require('./base64.js')
 const EvemitterCall = require('./call.js')
 
@@ -68,27 +70,6 @@ class EvemitterServer {
 
   getCalls () {
     return JSON.stringify(this.calls)
-  }
-
-  cleanCall () {
-    if (this.calls.length >= 1) return false
-    if (new Date(this.calls[0].timestamp).getTime() < new Date().getTime() && new Date().getTime() - new Date(this.calls[0].timestamp).getTime() >= 100) {
-      this.calls.shift() // Delete Call
-      return true
-    }
-    return false
-  }
-
-  cleanCalls () {
-    if (this.cleanCall()) {
-      this.cleanCalls()
-    }
-  }
-
-  async cc () {
-    while (true) {
-      await sleep()
-    }
   }
 
   mayAccess (login) {
