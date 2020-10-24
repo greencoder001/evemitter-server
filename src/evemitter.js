@@ -13,7 +13,6 @@ class EvemitterServer {
   constructor (hso, port, loginData) {
     this.calls = []
     this.currentCallID = 0
-    setInterval(this.cleanCalls, 10 * 1000)
     this.loginData = loginData
     this.server = https.createServer(hso, (req, res) => {
       res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' })
@@ -83,6 +82,12 @@ class EvemitterServer {
   cleanCalls () {
     if (this.cleanCall()) {
       this.cleanCalls()
+    }
+  }
+
+  async cc () {
+    while (true) {
+      await sleep()
     }
   }
 
